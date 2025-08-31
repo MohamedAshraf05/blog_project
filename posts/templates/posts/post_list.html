@@ -1,0 +1,28 @@
+{% extends 'posts/base.html' %}
+
+{% block post_list %}
+
+    <form action="{% url 'add' %}" method="post">
+        {% csrf_token %}
+        <input type="text" required name="post_title" placeholder="Enter a new post"> <br>
+        <textarea name="post_text" required placeholder="Enter your text here"></textarea><br>
+        <button type="submit">Add new post</button>
+    </form>    
+
+    <hr>
+    <h1>Posts</h1>
+    <ul>
+        {%for post in posts%}
+            <li>
+                <h2>  {{post.title}} </h2>
+                <p> id :{{post.id}} </p>
+                <p> {{post.content}} </p>
+                <p> {{post.created_at}} </p>
+                <a href="{% url 'delete' post.id %}">Delete</a>
+                <a href="{% url 'detail' post.id %}">Detail</a>
+            </li>
+        {%empty%}
+            <li>No posts available</li>
+        {% endfor %}
+    </ul>
+{% endblock post_list %}
