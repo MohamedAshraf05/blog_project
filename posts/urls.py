@@ -1,9 +1,12 @@
 from django.urls import path
-from . import views
-
+from .views import PostsList , PostDeleteView , PostCreateView , PostUpdate , PostDetail , AuthorView
 urlpatterns = [
-    path("all/" , views.get_posts , name="all"),
-    path("all/<int:post_id>/" , views.post_detail , name="detail"),
-    path("add/" , views.add_post , name="add"),
-    path("delete/<int:post_id>/" , views.delete_post , name="delete"),
+    path("post-list/" , PostsList.as_view() , name="list"),
+    path("delete/<int:pk>/", PostDeleteView.as_view() , name="delete"),
+    path("add/" , PostCreateView.as_view() , name="add"),
+    path("update/<int:pk>/" , PostUpdate.as_view() , name="update"),
+    path("detail/<int:pk>/" , PostDetail.as_view() , name="detail"),
+    path("author/" , AuthorView.as_view() , name="author_list"),
+    path("author/<int:pk>/" , AuthorView.as_view() , name="author"),
+    path("author/new/" , AuthorView.as_view() , name="new_author")
 ]

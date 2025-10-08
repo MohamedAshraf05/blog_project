@@ -1,35 +1,58 @@
 from django.shortcuts import render , redirect , HttpResponse
-from .models import Post
+from .models import Post , Author
+from django.views.generic import ListView , CreateView , UpdateView , DetailView , DeleteView , View
+from django.urls import reverse_lazy
 # Create your views here.
 
-def get_posts(request):
-    posts = Post.objects.all()
-    context = {"posts" : posts}
-    return render(request , "posts/post_list.html" , context)
 
-def add_post(request):
-    if request.method == "POST":
-        post_title = request.POST.get("post_title")
-        post_content = request.POST.get("post_text")
-        Post.objects.create(title=post_title , content=post_content)
-        return redirect("all")
-    return render(request , "posts/post_list.html")
+# Function based views FBV
+# Class based Views CBV
 
+# ORM -> Object relational mapig
 
-def delete_post(request , post_id):
-    try:
-        post = Post.objects.get(id=post_id)
-    except Post.DoesNotExist:
-        HttpResponse("Post is not exist")
-    
-    post.delete()
-    return redirect("all")
-    
-def post_detail(request , post_id):
-    
-    post = Post.objects.get(id=post_id)
+# post.object.all() -> Query Select * from post
+class PostsList(ListView):
+    model = Post
+    template_name = "posts/post_list.html"
+    context_object_name = "blogs"
 
-    if post:
-        context = {"post" : post}
-        return render(request , "posts/post_detail.html" , context)
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = "posts/post_confirm_delete.html"
+    success_url = reverse_lazy("list")
+
+class PostCreateView(CreateView):
+    model = Post
+    template_name = "posts/post_create.html"
+    fields = ["title" , "content"]
+    success_url = reverse_lazy("list")
+
+class PostUpdate(UpdateView):
+    model = Post
+    template_name = "posts/post_update.html"
+    fields = ["title" , "content"]
+    success_url = reverse_lazy("list")
+
+class PostDetail(DetailView):
+    model = Post
+    template_name = "posts/post_detail.html"
+    context_object_name = "post"
+
+class AuthorView(View):
+    def get(self , request , pk=None):
+        if pk:
+            author = Author.objects.get(pk=pk)
+            context = {"author" : author}
+            return render(request , "posts/author_detail.html" , context)
+        authors = Author.objects.all()
+        context = {"authors" : authors}
+        return render(request , "posts/authors.html" , context)
+    def post(self , request):
+        if request.method == "POST":
+            name = request.POST.get("name")
+            image = request.POST.get("image")
+
+            Author.objects.create(name=name , image=image)
+            return redirect("author_list")
+        return render(request , "posts/author_create.html")
     

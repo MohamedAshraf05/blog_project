@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <title>Document</title>
+</head>
+<body>
+<!-- From Uiverse.io by alexmaracinaru --> 
+    <div class="card">
+        <div class="card-image">
+            <img src="{{author.images.url}}" width="40" height="40" alt="author image">
+        </div>
+        <div class="heading">
+            <div class="author"> By <span class="name"> {{author.name}} </span></div>
+        </div>
+    </div>
+</body>
+</html>

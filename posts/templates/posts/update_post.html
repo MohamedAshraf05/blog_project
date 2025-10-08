@@ -1,0 +1,10 @@
+{% extends 'posts/base.html' %}
+
+{% block post_list %}
+    <form action="{% url 'update' post.id %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="post_title" value="{{post.title}}" required><br>
+        <textarea name="post_text"  required>{{post.content}}</textarea><br>
+        <button type="submit">Update</button>
+    </form>
+{% endblock post_list %}
